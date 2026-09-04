@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Descubre tu plan ideal · Vane Tello</title>
+<meta name="description" content="Test gratuito de 2 minutos: descubre qué tipo de plan de alimentación va con tu cuerpo, tu objetivo y tu rutina. Con la Lic. Vanessa Tello (CNP 5788).">
+<link rel="icon" href="brand/VT-Verde.png">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#9BB937">
+<!-- Vista previa cuando el enlace se pega en WhatsApp, Instagram o Facebook.
+     TODO: al publicar, cambiar el dominio de og:url y og:image por el real
+     (https://descubre.vanessatello.com.pe/...). WhatsApp exige URL absoluta. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vane Tello · Nutrición">
+<meta property="og:locale" content="es_PE">
+<meta property="og:title" content="Descubre cuál es tu plan ideal · Gratis">
+<meta property="og:description" content="Responde unas preguntas rápidas y te digo qué acompañamiento nutricional va con tu objetivo y tu rutina. Lic. Vanessa Tello · CNP 5788.">
+<meta property="og:url" content="https://tamibot.github.io/vt-descubre/">
+<meta property="og:image" content="https://tamibot.github.io/vt-descubre/img/preview-whatsapp.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Lic. Vanessa Tello, nutricionista">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Descubre cuál es tu plan ideal · Gratis">
+<meta name="twitter:description" content="Responde unas preguntas rápidas y te digo qué acompañamiento va con tu objetivo y tu rutina.">
+<meta name="twitter:image" content="https://tamibot.github.io/vt-descubre/img/preview-whatsapp.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Marca: títulos en script (equivalente a Highest) + cuerpo en Lato, según el Manual de Identidad. -->
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --verde:#9BB937; --verde-osc:#7A9425; --verde-cl:#C3D583; --verde-pal:#EDF3DC; --verde-hum:#F7FAEF;
+  --taupe:#8E8565; --taupe-cl:#C3BCA8; --naranja:#F7903C; --naranja-pal:#FEF0E3;
+  --amarillo:#F4E9AB; --amarillo-pal:#FBF6DE;
+  --tinta:#41423A; --tinta-sv:#78796D; --sans:'Lato',system-ui,sans-serif;
+  --r:20px; --sombra:0 18px 44px -26px rgba(65,66,58,.32);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--sans);font-weight:400;color:var(--tinta);background:#fff;
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  /* teléfonos con notch: que nada quede debajo del indicador de inicio */
+  padding-bottom:env(safe-area-inset-bottom);
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(720px,92vw);margin-inline:auto}
+h1{font-family:var(--sans);font-weight:900;font-size:clamp(2rem,5.4vw,3.1rem);line-height:1.14;color:var(--verde)}
+h2{font-family:var(--sans);font-weight:900;font-size:clamp(1.7rem,4.2vw,2.4rem);color:var(--verde);line-height:1.2}
+p{max-width:60ch}
+.lead{font-size:1.06rem;color:var(--tinta-sv);font-weight:300}
+
+/* ---- barra superior ---- */
+.top{
+  position:sticky;top:0;z-index:40;background:rgba(255,255,255,.95);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--verde-pal);
+}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 0}
+.lock{display:flex;align-items:center;min-height:48px}
+/* El logo es un lockup horizontal de 3:1 —"V T NUTRICIONISTAS by Vane Tello"—,
+   no una marca compacta. Escalarlo por ALTURA lo dejaba en 34px de alto y unos
+   100 de ancho: a ese tamaño "NUTRICIONISTAS" mide 8 píxeles y no se lee.
+   Se dimensiona por ancho, que es la medida que manda en un lockup. */
+.lock img{width:clamp(140px,36vw,168px);height:auto}
+.lock b{font-weight:300;letter-spacing:.24em;font-size:.78rem;color:var(--verde-osc);text-transform:uppercase;white-space:nowrap}
+.paso-tag{font-size:.7rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--taupe);white-space:nowrap}
+.barra{height:4px;background:var(--verde-pal)}
+.barra i{display:block;height:100%;width:0;background:var(--verde);transition:width .45s cubic-bezier(.2,.8,.2,1)}
+@media(max-width:520px){.lock b{letter-spacing:.1em;font-size:.7rem}.paso-tag{font-size:.62rem}}
+@media(max-width:899px){
+  /* En móvil la promesa se comprime: el primer campo tiene que verse ya. */
+  .promesa h1{font-size:1.75rem;margin:.5rem 0 .4rem}
+  .promesa .lead{font-size:.94rem}
+  .promesa .avala{display:none}          /* la credibilidad se repite abajo */
+  .entrada{gap:.9rem}
+}
+
+/* ---- pasos ---- */
+.paso{display:none;padding:clamp(1.6rem,4vw,2.8rem) 0 3.4rem;animation:entra .45s cubic-bezier(.2,.8,.2,1)}
+.paso.on{display:block}
+@keyframes entra{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ---- entrada (promesa + primer formulario juntos, sin clic previo) ---- */
+.hero{background:var(--verde-hum);border-bottom:1px solid var(--verde-pal);position:relative;overflow:hidden}
+.hero .deco{position:absolute;right:-9%;top:-16%;width:min(360px,44vw);opacity:.12;pointer-events:none;transform:rotate(-8deg)}
+.hero .wrap{position:relative;z-index:2;padding:clamp(1.2rem,3vw,2rem) 0 clamp(1.4rem,3vw,2rem)}
+@media(min-width:900px){.hero .wrap{width:min(1080px,94vw)}}
+/* Entrada en dos columnas: la promesa a la izquierda, el formulario a la derecha.
+   El objetivo es que el primer campo se vea sin hacer scroll. */
+.entrada{display:grid;gap:1.2rem}
+@media(min-width:900px){
+  .entrada{grid-template-columns:.85fr 1.15fr;gap:2.4rem;align-items:start}
+  .promesa{padding-top:.5rem}
+}
+.hero .card{margin-top:0}
+.bajo{padding-bottom:clamp(1.6rem,4vw,2.6rem)}
+
+/* Video: por ahora un marco con el botón de play. Se reemplaza por el iframe. */
+.video{margin-top:1.6rem}
+.video-marco{
+  position:relative;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;
+  background:linear-gradient(135deg,var(--verde-pal),#fff);
+  border:1.5px dashed var(--verde-cl);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;
+}
+.video-play{
+  width:64px;height:64px;border-radius:50%;border:0;cursor:pointer;
+  background:var(--verde);color:#fff;display:grid;place-items:center;
+  box-shadow:0 12px 26px -12px rgba(122,148,37,.9);transition:transform .2s,background .2s;
+}
+.video-play:hover{background:var(--verde-osc);transform:scale(1.06)}
+.video-nota{font-size:.84rem;color:var(--tinta-sv);font-weight:700}
+.video-nota b{color:var(--taupe);font-weight:900}
+.video-pie{font-size:.86rem;color:var(--tinta-sv);font-weight:300;margin-top:.6rem;text-align:center;margin-inline:auto}
+.gratis{
+  display:inline-block;background:var(--verde);color:#fff;border-radius:999px;
+  padding:.3rem .9rem;font-size:.7rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;
+}
+.hero h1{margin:.8rem 0 .7rem}
+.entrega{list-style:none;display:grid;gap:.4rem;margin-top:1.4rem}
+@media(min-width:700px){.entrega{grid-template-columns:repeat(3,1fr);gap:1rem}}
+.entrega li{padding-left:1.5rem;position:relative;font-size:.96rem;font-weight:300}
+.entrega li b{font-weight:900}
+.entrega li::before{
+  content:'';position:absolute;left:0;top:.5em;width:14px;height:14px;background:var(--verde);
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 6L9 17l-5-5' fill='none' stroke='%23000' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;
+}
+.avala{display:flex;align-items:center;gap:.85rem;margin-top:1.2rem;font-size:.86rem;color:var(--tinta-sv);font-weight:300}
+.avala img{width:68px;height:68px;border-radius:50%;object-fit:cover;object-position:52% 16%;border:2.5px solid #fff;box-shadow:var(--sombra);flex:0 0 auto}
+.avala .cnp{display:block;margin-top:.18rem}
+.avala .pac{display:block;margin-top:.3rem;font-size:.98rem;font-weight:700;color:var(--verde)}
+
+/* ---- formularios ---- */
+.card{
+  background:#fff;border:1px solid var(--verde-pal);border-radius:var(--r);
+  padding:clamp(1.2rem,3vw,1.9rem);box-shadow:var(--sombra);
+}
+.campo{margin-bottom:1.05rem}
+form > .campo:last-of-type{margin-bottom:0}
+.dos > .campo{margin-bottom:0}   /* el espacio lo da el gap de la grilla */
+label{display:block;font-size:.8rem;font-weight:900;letter-spacing:.03em;margin-bottom:.35rem}
+label small{display:block;font-weight:300;letter-spacing:0;color:var(--tinta-sv);font-size:.8rem;margin-top:.1rem}
+input,select{
+  width:100%;font-family:var(--sans);font-size:1rem;color:var(--tinta);background:#fff;
+  padding:.8rem .95rem;border:1.5px solid var(--verde-pal);border-radius:12px;
+  transition:border-color .2s,box-shadow .2s;
+}
+input:focus,select:focus{outline:0;border-color:var(--verde);box-shadow:0 0 0 4px rgba(155,185,55,.17)}
+input[aria-invalid=true]{border-color:var(--naranja);background:var(--naranja-pal)}
+.err{display:none;font-size:.8rem;color:#C2571A;font-weight:700;margin-top:.3rem}
+input[aria-invalid=true]~.err{display:block}
+.dos{display:grid;gap:1.05rem}
+@media(min-width:600px){.dos{grid-template-columns:1fr 1fr}}
+
+/* opciones */
+fieldset{border:0}
+legend{font-size:.8rem;font-weight:900;letter-spacing:.03em;margin-bottom:.4rem}
+legend small{display:block;font-weight:300;letter-spacing:0;color:var(--tinta-sv);font-size:.8rem}
+.ops{display:grid;gap:.55rem}
+@media(min-width:560px){.ops.g2{grid-template-columns:1fr 1fr}}
+.op{position:relative}
+.op input{position:absolute;opacity:0;width:0;height:0}
+.op span{
+  display:flex;align-items:center;gap:.6rem;cursor:pointer;
+  border:1.5px solid var(--verde-pal);border-radius:14px;padding:.78rem .95rem;
+  font-size:.95rem;transition:border-color .2s,background .2s,transform .2s;
+}
+.op span::before{
+  content:'';flex:0 0 18px;height:18px;border-radius:50%;
+  border:2px solid var(--verde-cl);transition:background .2s,border-color .2s,box-shadow .2s;
+}
+.op input:checked+span{border-color:var(--verde);background:var(--verde-hum)}
+.op input:checked+span::before{background:var(--verde);border-color:var(--verde);box-shadow:inset 0 0 0 3px #fff}
+.op input:focus-visible+span{box-shadow:0 0 0 4px rgba(155,185,55,.2)}
+.op span:hover{transform:translateX(2px)}
+.ops.multi .op span::before{border-radius:5px}
+
+/* consentimiento */
+.consent{display:flex;gap:.7rem;align-items:flex-start;margin-top:1.1rem;font-size:.84rem;font-weight:300;color:var(--tinta-sv)}
+.consent input{width:20px;height:20px;flex:0 0 20px;margin-top:2px;accent-color:var(--verde)}
+
+/* botones */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  font-family:var(--sans);font-weight:900;font-size:1rem;
+  padding:.92rem 1.7rem;border:0;border-radius:999px;cursor:pointer;
+  transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s,background .22s,border-color .22s;
+}
+.btn-p{background:var(--verde);color:#fff;box-shadow:0 12px 26px -14px rgba(122,148,37,.85)}
+.btn-p:hover{background:var(--verde-osc);transform:translateY(-2px)}
+.btn-p:disabled{background:var(--taupe-cl);box-shadow:none;cursor:wait;transform:none}
+.btn-s{background:#fff;color:var(--taupe);border:1.5px solid var(--taupe-cl);font-weight:700}
+.btn-s:hover{border-color:var(--taupe);transform:translateY(-2px)}
+.btn-wa{background:var(--naranja);color:#fff;box-shadow:0 12px 26px -14px rgba(247,144,60,.9)}
+.btn-wa:hover{transform:translateY(-2px);filter:brightness(1.05)}
+.acciones{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;margin-top:1.5rem}
+.acciones .btn-p{flex:1;min-width:210px}
+.aviso{font-size:.8rem;color:var(--tinta-sv);font-weight:300;margin-top:.9rem}
+
+/* cabecera de paso */
+.paso-cab{margin-bottom:1.5rem}
+.paso-cab .n{font-size:.72rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--verde-osc)}
+.paso-cab h2{margin:.3rem 0 .35rem}
+.paso-cab p{color:var(--tinta-sv);font-weight:300}
+.aviso-vuelve{
+  background:var(--verde-pal);border-radius:14px;padding:.8rem 1rem;font-size:.92rem;
+  color:var(--tinta);margin-bottom:1rem;line-height:1.5;
+}
+.retomar{
+  background:var(--amarillo-pal);border:1px solid var(--amarillo);border-radius:14px;
+  padding:.8rem 1rem;font-size:.9rem;margin-bottom:1.2rem;font-weight:300;
+}
+.retomar b{font-weight:900}
+
+/* ---- resultado ---- */
+.res-hero{background:var(--verde);color:#fff;border-radius:var(--r);padding:clamp(1.5rem,4vw,2.3rem);position:relative;overflow:hidden}
+.res-hero .et{font-size:.72rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
+.res-hero h2{color:#fff;margin:.35rem 0 .55rem;position:relative}
+.res-hero p{color:rgba(255,255,255,.93);font-weight:300;position:relative}
+.rec{display:grid;gap:1rem;margin-top:1.3rem}
+@media(min-width:680px){.rec{grid-template-columns:1.1fr .9fr}}
+.eti{font-size:.72rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--taupe)}
+.rec-plan{background:var(--amarillo-pal);border:1px solid var(--amarillo);border-radius:16px;padding:1.25rem}
+/* Los iconos vienen con fondo blanco (no transparente): multiply los integra al bloque. */
+.rec-plan img{width:54px;margin-bottom:.45rem;mix-blend-mode:multiply}
+.rec-plan .t{font-family:var(--sans);font-size:1.5rem;color:var(--verde-osc);line-height:1.2}
+.rec-lista{background:var(--verde-hum);border:1px solid var(--verde-pal);border-radius:16px;padding:1.25rem}
+.rec-lista ul{list-style:none;display:grid;gap:.55rem;font-size:.94rem;margin-top:.5rem;font-weight:300}
+.rec-lista li{padding-left:1.4rem;position:relative}
+.rec-lista li::before{
+  content:'';position:absolute;left:0;top:.42em;width:14px;height:14px;background:var(--verde);
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 6L9 17l-5-5' fill='none' stroke='%23000' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;
+}
+.res-cta{background:#fff;border:1px solid var(--verde-pal);border-radius:16px;padding:1.35rem;margin-top:1rem;text-align:center}
+.res-cta p{margin-inline:auto}
+
+footer{background:var(--verde-hum);border-top:1px solid var(--verde-pal);padding:1.8rem 0;margin-top:1.5rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:.9rem;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--tinta-sv);font-weight:300}
+/* En el teléfono se toca con el dedo: 44px mínimo en todo lo que se pulsa. */
+footer a{display:inline-flex;align-items:center;min-height:44px}
+footer img{width:170px;opacity:.9}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <a class="lock" href="index.html"><img src="brand/VT-Hoja-membretada.png" alt="VT Nutricionistas by Vane Tello"></a>
+    <span class="paso-tag" id="tag">Gratis · 2 minutos</span>
+  </div>
+  <div class="barra"><i id="barra"></i></div>
+</div>
+
+<p class="sr" role="status" aria-live="polite" id="anuncio"></p>
+
+<!-- ============ PASO 1 · PROMESA + CONTACTO (una sola pantalla) ============ -->
+<section class="paso on hero" id="p1">
+  <img class="deco" src="brand/Cita-unica-virtual.png" alt="">
+  <div class="wrap entrada">
+    <!-- Columna izquierda: la promesa, corta. En móvil va arriba del formulario
+         pero comprimida, para que el primer campo quede sobre la línea de pliegue. -->
+    <div class="promesa">
+      <span class="gratis">Gratis · sin compromiso</span>
+      <h1>Descubre cuál es<br>tu plan ideal</h1>
+      <p class="lead">Responde unas preguntas rápidas y te digo qué acompañamiento va con tu objetivo y tu rutina.</p>
+      <div class="avala">
+        <img src="img/foto-vanessa-1-final.jpg" alt="">
+        <span>Validado por <b style="font-weight:900">Lic. Vanessa Tello</b>
+          <span class="cnp">Nutricionista colegiada · CNP 5788</span>
+          <span class="pac">+2,900 pacientes atendidos</span></span>
+      </div>
+    </div>
+
+    <!-- Columna derecha: el formulario. Es lo primero que se ve. -->
+    <form class="card" id="f1" novalidate>
+      <div class="retomar" id="retomar" hidden>Te habías quedado a medias. <b>Retomamos donde lo dejaste.</b></div>
+      <fieldset class="campo">
+        <legend>¿Ya te has atendido con nosotros?</legend>
+        <div class="ops g2">
+          <label class="op"><input type="radio" name="ya_paciente" value="No, es mi primera vez" required><span>No, es mi primera vez</span></label>
+          <label class="op"><input type="radio" name="ya_paciente" value="Sí, ya me atendí antes"><span>Sí, ya me atendí antes</span></label>
+        </div>
+      </fieldset>
+      <div class="campo">
+        <label for="nombre">¿Cómo te llamas?</label>
+        <input id="nombre" name="nombre" required autocomplete="name" autocapitalize="words" placeholder="Nombre y apellido">
+        <span class="err">Escribe tu nombre.</span>
+      </div>
+      <div class="dos">
+        <div class="campo">
+          <label for="whatsapp">Tu WhatsApp</label>
+          <input id="whatsapp" name="whatsapp" required inputmode="tel" autocomplete="tel" placeholder="9XX XXX XXX">
+          <span class="err">Revisa el número: 9 dígitos si es de Perú.</span>
+        </div>
+        <div class="campo" id="campo-email">
+          <label for="email">Tu correo</label>
+          <input id="email" name="email" type="email" required autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="tucorreo@correo.com">
+          <span class="err">Revisa el correo.</span>
+        </div>
+      </div>
+      <fieldset class="campo" id="campo-objetivo">
+        <legend>¿Cuál es tu objetivo principal?</legend>
+        <div class="ops g2">
+          <label class="op"><input type="radio" name="objetivo" value="Perder peso" required><span>Perder peso</span></label>
+          <label class="op"><input type="radio" name="objetivo" value="Mejorar mis hábitos"><span>Mejorar mis hábitos</span></label>
+          <label class="op"><input type="radio" name="objetivo" value="Ganar masa muscular"><span>Ganar masa muscular</span></label>
+          <label class="op"><input type="radio" name="objetivo" value="Problemas digestivos"><span>Problemas digestivos</span></label>
+          <label class="op"><input type="radio" name="objetivo" value="Cirugía bariátrica"><span>Cirugía bariátrica</span></label>
+          <label class="op"><input type="radio" name="objetivo" value="Embarazo o lactancia"><span>Embarazo o lactancia</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="campo" id="campo-cuando">
+        <legend>¿Cuándo te gustaría empezar?</legend>
+        <div class="ops g2">
+          <label class="op"><input type="radio" name="cuando" value="Esta semana" required><span>Esta semana</span></label>
+          <label class="op"><input type="radio" name="cuando" value="Este mes"><span>Este mes</span></label>
+          <label class="op"><input type="radio" name="cuando" value="En 2 o 3 meses"><span>En 2 o 3 meses</span></label>
+          <label class="op"><input type="radio" name="cuando" value="Solo estoy averiguando"><span>Solo estoy averiguando</span></label>
+        </div>
+      </fieldset>
+      <label class="consent">
+        <input type="checkbox" name="consentimiento" value="si" required>
+        <span>Acepto que el equipo de Vane Tello me contacte por WhatsApp y correo para mi atención nutricional (Ley 29733).</span>
+      </label>
+      <div class="aviso-vuelve" id="aviso-vuelve" hidden>
+        Con tu nombre y tu número nos alcanza: ya tenemos tu historia.
+        <b>Te escribimos por WhatsApp para retomar.</b>
+      </div>
+      <div class="acciones">
+        <button class="btn btn-p" type="submit">Continuar →</button>
+      </div>
+      <p class="aviso">Nada de spam. Puedes pedir que borremos tus datos cuando quieras.</p>
+    </form>
+  </div>
+
+  <!-- Debajo del pliegue: el video y el detalle. Quien ya se convenció llena arriba;
+       quien necesita más, baja. -->
+  <div class="wrap bajo">
+    <!-- TODO video: reemplazar este bloque por el iframe de YouTube o Vimeo cuando
+         Vane grabe el video. Sin autoplay: arranca cuando la persona le da play. -->
+    <div class="video" id="video">
+      <div class="video-marco">
+        <button class="video-play" type="button" aria-label="Reproducir el video de presentación">
+          <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true">
+            <path d="M8 5v14l11-7z" fill="currentColor"/>
+          </svg>
+        </button>
+        <span class="video-nota">Aquí va el video de Vane <b>(pendiente de grabar)</b></span>
+      </div>
+      <p class="video-pie">Un minuto contándote cómo funciona la consulta y qué recibes.</p>
+    </div>
+
+    <ul class="entrega">
+      <li><b>Tu perfil nutricional</b> — en qué punto estás y qué te está frenando</li>
+      <li><b>La ruta recomendada</b> — qué plan y con qué frecuencia te conviene</li>
+      <li><b>Mi guía de recetas</b> — te llega al correo con tu resultado</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ PASO 2 · PERFIL ============ -->
+<section class="paso" id="p2">
+  <div class="wrap">
+    <div class="paso-cab">
+      <span class="n">Paso 2 de 2</span>
+      <h2>Cuéntame de ti</h2>
+      <p>Última pregunta y te muestro tu resultado.</p>
+    </div>
+    <form class="card" id="f2" novalidate>
+      <fieldset class="campo">
+        <legend>¿Cómo prefieres atenderte?</legend>
+        <div class="ops g2">
+          <label class="op"><input type="radio" name="modalidad" value="Virtual (Zoom)" required><span>Virtual, por Zoom</span></label>
+          <label class="op"><input type="radio" name="modalidad" value="Presencial (Miraflores)"><span>Presencial en Miraflores</span></label>
+          <label class="op"><input type="radio" name="modalidad" value="Cualquiera"><span>La que haya antes</span></label>
+        </div>
+      </fieldset>
+      <div class="dos">
+        <div class="campo">
+          <label for="edad">Tu edad</label>
+          <select id="edad" name="edad" required>
+            <option value="">Elige</option>
+            <option>Menos de 25</option><option>25 a 34</option><option>35 a 44</option>
+            <option>45 a 54</option><option>55 o más</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="pais">¿Desde dónde nos escribes?</label>
+          <select id="pais" name="pais" required>
+            <option value="">Elige tu país</option>
+            <option>Perú</option>
+            <option>Estados Unidos</option><option>España</option><option>Chile</option>
+            <option>Argentina</option><option>México</option><option>Colombia</option>
+            <option>Ecuador</option><option>Bolivia</option><option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="dos" id="zona-peru" hidden>
+        <div class="campo">
+          <label for="estado">¿En qué departamento?</label>
+          <select id="estado" name="estado">
+            <option value="">Elige</option>
+            <option>Lima</option><option>Arequipa</option><option>La Libertad</option>
+            <option>Piura</option><option>Lambayeque</option><option>Cusco</option>
+            <option>Junín</option><option>Áncash</option><option>Ica</option>
+            <option>Callao</option><option>Otro departamento</option>
+          </select>
+        </div>
+        <div class="campo" id="campo-distrito" hidden>
+          <label for="distrito">¿En qué distrito?</label>
+          <select id="distrito" name="distrito">
+            <option value="">Elige</option>
+            <option>Miraflores</option><option>San Isidro</option><option>Surco</option>
+            <option>La Molina</option><option>San Borja</option><option>Jesús María</option>
+            <option>Magdalena</option><option>Lince</option><option>Barranco</option>
+            <option>San Miguel</option><option>Pueblo Libre</option><option>Chorrillos</option>
+            <option>Otro distrito</option>
+          </select>
+        </div>
+      </div>
+      <fieldset class="campo">
+        <legend>¿Has trabajado antes con un nutricionista?</legend>
+        <div class="ops g2">
+          <label class="op"><input type="radio" name="antes" value="Nunca" required><span>Nunca</span></label>
+          <label class="op"><input type="radio" name="antes" value="Sí, y funcionó un tiempo"><span>Sí, funcionó un tiempo</span></label>
+          <label class="op"><input type="radio" name="antes" value="Sí, pero no funcionó"><span>Sí, pero no funcionó</span></label>
+          <label class="op"><input type="radio" name="antes" value="Estoy en tratamiento"><span>Estoy en tratamiento ahora</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="campo">
+        <legend>¿Qué es lo que más te cuesta?<small>Puedes marcar varias</small></legend>
+        <div class="ops multi g2" id="ops-dificultad"></div>
+      </fieldset>
+      <div class="acciones">
+        <button class="btn btn-p" type="submit">Ver mi resultado →</button>
+        <button class="btn btn-s" type="button" data-ir="1">Volver</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============ RESULTADO ============ -->
+<section class="paso" id="p4">
+  <div class="wrap">
+    <div class="res-hero">
+      <span class="et">Tu resultado</span>
+      <h2 id="r-titulo">Tu perfil</h2>
+      <p id="r-texto"></p>
+    </div>
+    <div class="rec">
+      <div class="rec-plan">
+        <img id="r-icono" src="brand/Cita-unica-virtual.png" alt="">
+        <span class="eti">Ruta recomendada</span>
+        <div class="t" id="r-plan"></div>
+        <div id="r-precio" style="font-size:1.35rem;font-weight:700;color:var(--verde);margin-top:.15rem"></div>
+        <p style="font-size:.92rem;color:var(--tinta-sv);font-weight:300;margin-top:.35rem" id="r-plan-por"></p>
+      </div>
+      <div class="rec-lista">
+        <span class="eti">Tu plan incluiría</span>
+        <ul id="r-incluye"></ul>
+      </div>
+    </div>
+    <div class="res-cta">
+      <h2 style="font-size:clamp(1.5rem,3.6vw,2rem)" id="r-cierre">¿Lo vemos juntas?</h2>
+      <!-- OJO: la guía se envía por el workflow del CRM. No publicar hasta que ese envío esté conectado. -->
+      <p class="lead" style="font-size:1rem">Hoy mismo te llega tu guía de recetas al correo. Si quieres avanzar, escríbeme y coordinamos tu primera cita — te confirmo horarios el mismo día.</p>
+      <div class="acciones" style="justify-content:center">
+        <a class="btn btn-wa" id="r-wa" href="#" target="_blank" rel="noopener">Escribirle a Vane por WhatsApp</a>
+        <a class="btn btn-s" href="index.html#servicios">Ver todos los planes y precios</a>
+      </div>
+      <p class="aviso">Tus respuestas quedan en tu ficha del consultorio. Las ve solo la Lic. Vanessa
+        y su equipo, y sirven para que no tengas que repetir nada en la consulta.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img src="brand/VT-Hoja-membretada.png" alt="Vane Tello">
+    <span>Lic. Vanessa Tello · CNP 5788 · Miraflores, Lima · <a href="https://wa.me/51991137288">+51 991 137 288</a></span>
+  </div>
+</footer>
+
+<script>
+/* =======================================================================
+   Embudo de captación. Objetivo único: quedarnos con los datos.
+
+   Decisiones que importan:
+   - El paso 1 va junto a la promesa, sin pantalla previa: un tap menos.
+   - El lead se guarda al terminar el paso 1. Si abandona en el 2 o el 3,
+     ya tenemos nombre, WhatsApp, correo, objetivo y urgencia.
+   - Si escribe sus datos y se va sin enviar, se manda igual como 'parcial'.
+   - Guarda de dónde vino (utm / src / referrer) porque el tráfico llega de
+     IG, TikTok, el bot y stories, y hay que poder separarlos.
+   - Si vuelve más tarde, retoma donde se quedó.
+   ======================================================================= */
+const CRM_ENDPOINT = "https://primary-production-9caaf.up.railway.app/webhook/captacion-vt"; // n8n → GHL (flujo "VT · Captación web")
+const WA = "51991137288";
+const TOTAL = 2;                 // pasos de preguntas; el 3.º es el resultado
+const RETOMAR_HORAS = 48;
+
+const lead = {};
+let leadId = null;
+let pasoActual = 1;
+let guardadoContacto = false;
+
+const $ = s => document.querySelector(s);
+const pasos = [...document.querySelectorAll('.paso')];
+
+/* ---------- de dónde viene el tráfico ---------- */
+function origen(){
+  const q = new URLSearchParams(location.search);
+  const o = {};
+  ['utm_source','utm_medium','utm_campaign','utm_content','src'].forEach(k => {
+    const v = q.get(k); if (v) o[k] = v.slice(0, 80);
+  });
+  if (!o.utm_source && !o.src && document.referrer){
+    try{ o.referrer = new URL(document.referrer).hostname; }catch(err){ /* referrer inválido */ }
+  }
+  return o;
+}
+Object.assign(lead, origen());
+
+/* ---------- si el bot manda el link con datos, prellenar ---------- */
+(function prellenar(){
+  const q = new URLSearchParams(location.search);
+  const mapa = {n:'nombre', nombre:'nombre', t:'whatsapp', tel:'whatsapp', e:'email', email:'email'};
+  for (const [param, campo] of Object.entries(mapa)){
+    const v = q.get(param);
+    if (v && $('#' + campo) && !$('#' + campo).value) $('#' + campo).value = v.slice(0, 120);
+  }
+})();
+
+/* ---------- navegación ---------- */
+function ir(n){
+  pasoActual = n;
+  pasos.forEach((p,i) => p.classList.toggle('on', i === n - 1));
+  $('#barra').style.width = Math.min(100, (n - 1) / TOTAL * 100) + '%';
+  $('#tag').textContent = n === 1 ? 'Gratis · 2 minutos'
+                        : n > TOTAL ? 'Tu resultado'
+                        : `Paso ${n} de ${TOTAL}`;
+  $('#anuncio').textContent = n > TOTAL ? 'Tu resultado está listo.' : `Paso ${n} de ${TOTAL}`;
+  if (location.hash !== '#paso-' + n) history.pushState({n}, '', '#paso-' + n);
+  window.scrollTo({top:0, behavior:'instant'});
+  // Foco en el primer control del paso, para teclado y lectores de pantalla.
+  const primero = pasos[n-1]?.querySelector('input:not([type=hidden]),select');
+  if (primero && n > 1) primero.focus({preventScroll:true});
+}
+addEventListener('popstate', () => {
+  const n = Number((location.hash.match(/#paso-(\d)/) || [])[1] || 1);
+  // No se salta a pasos posteriores sin haber dejado los datos de contacto.
+  ir(guardadoContacto ? Math.min(n, TOTAL + 1) : 1);
+});
+document.querySelectorAll('[data-ir]').forEach(b =>
+  b.addEventListener('click', () => ir(Number(b.dataset.ir))));
+
+/* ---------- validación ---------- */
+// Perú: 9 dígitos que empiezan en 9. Fuera del Perú no se bloquea.
+function normalizarTel(valor){
+  const d = String(valor).replace(/\D/g, '');
+  if (/^9\d{8}$/.test(d)) return '+51' + d;
+  if (/^51 ?9\d{8}$/.test(d)) return '+' + d;
+  if (d.length >= 8 && d.length <= 15) return '+' + d;
+  return null;
+}
+function marcar(el, ok){
+  el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+  return ok;
+}
+function validar(form){
+  let ok = true;
+  form.querySelectorAll('input[required],select[required]').forEach(el => {
+    if (el.type === 'radio' || el.type === 'checkbox'){
+      const grupo = form.querySelectorAll(`[name="${el.name}"]`);
+      if (![...grupo].some(x => x.checked)) ok = false;
+      return;
+    }
+    let bien = el.checkValidity() && el.value.trim() !== '';
+    if (el.id === 'whatsapp') bien = bien && normalizarTel(el.value) !== null;
+    if (!marcar(el, bien)) ok = false;
+  });
+  if (!ok) form.reportValidity();
+  return ok;
+}
+
+/* ---------- envío ---------- */
+function paquete(etapa){
+  return {...lead, etapa, leadId, pagina:location.href, fecha:new Date().toISOString()};
+}
+async function guardar(etapa){
+  const payload = paquete(etapa);
+  if (!CRM_ENDPOINT){
+    if (!leadId) leadId = 'local-' + Date.now();
+    payload.leadId = leadId;
+    localStorage.setItem('vt_funnel_' + leadId, JSON.stringify(payload));
+    return;
+  }
+  try{
+    const r = await fetch(CRM_ENDPOINT, {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+    });
+    const data = await r.json().catch(() => ({}));
+    if (data.id && !leadId) leadId = data.id;
+  }catch(err){
+    console.error('CRM no respondió en la etapa ' + etapa, err);
+    localStorage.setItem('vt_funnel_fallo_' + Date.now(), JSON.stringify(payload));
+  }
+}
+// Se va sin enviar: mandamos lo que haya con sendBeacon (no bloquea la salida).
+function guardarParcial(){
+  if (guardadoContacto) return;                       // ya está guardado como lead
+  const f = $('#f1');
+  const tiene = f.nombre.value.trim() && (f.whatsapp.value.trim() || f.email.value.trim());
+  if (!tiene) return;
+  const payload = {...paquete('parcial'),
+    nombre:f.nombre.value.trim(), whatsapp:f.whatsapp.value.trim(), email:f.email.value.trim(),
+    objetivo:f.querySelector('[name=objetivo]:checked')?.value || '',
+    cuando:f.querySelector('[name=cuando]:checked')?.value || ''};
+  if (CRM_ENDPOINT && navigator.sendBeacon){
+    navigator.sendBeacon(CRM_ENDPOINT, new Blob([JSON.stringify(payload)], {type:'application/json'}));
+  } else {
+    localStorage.setItem('vt_parcial_' + Date.now(), JSON.stringify(payload));
+  }
+}
+addEventListener('pagehide', guardarParcial);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') guardarParcial(); });
+
+/* ---------- retomar donde se quedó ---------- */
+function recordar(){
+  try{
+    localStorage.setItem('vt_progreso', JSON.stringify({lead, leadId, paso:pasoActual, ts:Date.now()}));
+  }catch(err){ /* almacenamiento lleno o bloqueado: seguimos igual */ }
+}
+(function retomar(){
+  try{
+    const g = JSON.parse(localStorage.getItem('vt_progreso') || 'null');
+    if (!g || !g.lead?.nombre) return;
+    if (Date.now() - g.ts > RETOMAR_HORAS * 3600e3){ localStorage.removeItem('vt_progreso'); return; }
+    Object.assign(lead, g.lead);
+    leadId = g.leadId;
+    guardadoContacto = true;
+    $('#retomar').hidden = false;
+    // Vuelve al paso donde estaba, nunca directo al resultado.
+    ir(Math.min(g.paso || 2, TOTAL));
+  }catch(err){
+    console.error('No se pudo retomar el progreso:', err);
+  }
+})();
+
+function recoger(form){
+  const fd = new FormData(form);
+  for (const k of new Set(fd.keys())){
+    const vals = fd.getAll(k);
+    lead[k] = vals.length > 1 ? vals.join(' · ') : vals[0];
+  }
+  if (lead.whatsapp) lead.whatsapp_e164 = normalizarTel(lead.whatsapp) || '';
+}
+
+function conectar(form, etapa, siguiente){
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!validar(form)) return;
+    recoger(form);
+    const btn = form.querySelector('button[type=submit]');
+    const txt = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Guardando…';
+    await guardar(etapa);
+    if (etapa === 'contacto') guardadoContacto = true;
+    btn.disabled = false; btn.textContent = txt;
+    // Quien ya fue paciente no sigue al paso 2: su ficha ya tiene todo eso.
+    if (etapa === 'contacto' && window.SOLO_UN_PASO) { pintarGracias(); return; }
+    if (siguiente > TOTAL) pintarResultado();
+    ir(siguiente);
+    // Después de avanzar, así al volver retoma el paso correcto.
+    // Si ya terminó no se guarda nada: pintarResultado() limpió el progreso.
+    if (siguiente <= TOTAL) recordar();
+  });
+}
+conectar($('#f1'), 'contacto', 2);
+conectar($('#f2'), 'perfil', 3);   // 3 > TOTAL ⇒ pinta el resultado
+
+/* Al marcar una opción, lleva la vista al siguiente grupo sin responder. */
+document.querySelectorAll('.ops:not(.multi) input[type=radio]').forEach(r => {
+  r.addEventListener('change', () => {
+    const form = r.closest('form');
+    const pend = [...form.querySelectorAll('fieldset,.campo')].find(c => {
+      const radios = c.querySelectorAll('input[type=radio]');
+      const sel = c.querySelector('select');
+      if (radios.length) return ![...radios].some(x => x.checked);
+      if (sel) return !sel.value;
+      return false;
+    });
+    if (pend) pend.scrollIntoView({block:'center', behavior:'smooth'});
+  });
+});
+
+/* ---------- quien ya fue paciente no repite el test ----------
+   Muchas personas escriben después de un año diciendo que quieren retomar.
+   Hacerles llenar el test completo otra vez es pedirles datos que ya tenemos y
+   tratarlas como desconocidas. Si dicen que ya se atendieron, se les piden solo
+   nombre y teléfono, y con eso el equipo recupera su historia. */
+const camposDeNueva = ['#campo-objetivo', '#campo-cuando', '#campo-email'];
+
+function ajustarSiVuelve(){
+  const v = (document.querySelector('input[name="ya_paciente"]:checked') || {}).value || '';
+  const vuelve = v.startsWith('Sí');
+  camposDeNueva.forEach(sel => {
+    const el = document.querySelector(sel);
+    if (!el) return;
+    el.hidden = vuelve;
+    el.querySelectorAll('input,select').forEach(i => { i.required = !vuelve && i.dataset.req === '1'; });
+  });
+  const aviso = $('#aviso-vuelve');
+  if (aviso) aviso.hidden = !vuelve;
+  const btn = document.querySelector('#f1 button[type=submit]');
+  if (btn) btn.textContent = vuelve ? 'Que me escriban →' : 'Continuar →';
+  // Quien vuelve termina en el primer paso: no tiene sentido preguntarle
+  // modalidad ni hábitos cuando su ficha ya los tiene.
+  window.SOLO_UN_PASO = vuelve;
+}
+document.querySelectorAll('input[name="ya_paciente"]').forEach(r =>
+  r.addEventListener('change', ajustarSiVuelve));
+
+/* ---------- ubicación en cascada ----------
+   País siempre; departamento solo si es Perú; distrito solo si es Lima.
+   Preguntarle el distrito a alguien de Madrid es ruido, y cada campo de más en
+   un formulario cuesta conversión. */
+const selPais = $('#pais'), zonaPeru = $('#zona-peru');
+const selEstado = $('#estado'), campoDistrito = $('#campo-distrito'), selDistrito = $('#distrito');
+
+function ajustarUbicacion(){
+  const esPeru = selPais.value === 'Perú';
+  zonaPeru.hidden = !esPeru;
+  if (!esPeru){ selEstado.value = ''; selDistrito.value = ''; campoDistrito.hidden = true; return; }
+  const esLima = selEstado.value === 'Lima' || selEstado.value === 'Callao';
+  campoDistrito.hidden = !esLima;
+  if (!esLima) selDistrito.value = '';
+}
+selPais.addEventListener('change', ajustarUbicacion);
+selEstado.addEventListener('change', ajustarUbicacion);
+
+/* ---------- dificultades según el objetivo ----------
+   Lo que le cuesta a quien quiere bajar de peso no se parece en nada a lo que le
+   cuesta a alguien operado de manga. Con opciones genéricas la persona marca lo
+   que más o menos le suena; con las suyas, marca lo que de verdad le pasa — y
+   eso es lo que después hace que el seguimiento suene escrito para ella. */
+const DIFICULTADES = {
+  'Perder peso': ['Antojos y picoteo entre comidas', 'Bajo y vuelvo a subir',
+    'Ansiedad al comer', 'No tengo tiempo de cocinar', 'Como fuera de casa',
+    'Me da hambre de noche'],
+  'Ganar masa muscular': ['No llego a la proteína del día', 'Se me olvida comer',
+    'No sé qué comer antes o después de entrenar', 'Como poco y sin hambre',
+    'No tengo tiempo de cocinar', 'Los suplementos me confunden'],
+  'Problemas digestivos': ['Hinchazón después de comer', 'No sé qué alimento me cae mal',
+    'Estreñimiento', 'Acidez o reflujo', 'Como a deshoras', 'Gases'],
+  'Cirugía bariátrica': ['Me lleno muy rápido', 'No llego a la proteína del día',
+    'Hay alimentos que no tolero', 'Se me olvidan los suplementos',
+    'Volví a subir de peso', 'No sé cómo avanzar de textura'],
+  'Embarazo o lactancia': ['Náuseas', 'Antojos', 'No sé si estoy comiendo suficiente',
+    'Acidez', 'Me preocupa subir de más', 'Anemia o hierro bajo'],
+  'Mejorar mis hábitos': ['Como a deshoras', 'No tengo tiempo de cocinar',
+    'Como fuera de casa', 'Picoteo todo el día', 'Salto el desayuno',
+    'Tomo poca agua'],
+};
+const DIF_POR_DEFECTO = DIFICULTADES['Mejorar mis hábitos'];
+
+function pintarDificultades(){
+  const obj = (document.querySelector('input[name="objetivo"]:checked') || {}).value;
+  const caja = $('#ops-dificultad');
+  if (!caja) return;
+  const marcadas = new Set([...caja.querySelectorAll('input:checked')].map(i => i.value));
+  const lista = DIFICULTADES[obj] || DIF_POR_DEFECTO;
+  caja.innerHTML = lista.map(v =>
+    `<label class="op"><input type="checkbox" name="dificultad" value="${v}"` +
+    `${marcadas.has(v) ? ' checked' : ''}><span>${v}</span></label>`).join('');
+}
+document.querySelectorAll('input[name="objetivo"]').forEach(r =>
+  r.addEventListener('change', pintarDificultades));
+pintarDificultades();
+
+/* Pantalla corta para quien ya fue paciente: no hay recomendación que darle,
+   porque su plan lo define la Lic. mirando su historia. */
+function pintarGracias(){
+  const r = $('#p4') || $('#p3');
+  if (!r) return;
+  r.innerHTML = `<div class="wrap"><div class="res-hero">
+      <span class="et">Listo</span>
+      <h2 id="r-titulo">¡Qué bueno que vuelvas!</h2>
+      <p class="lead">Ya tenemos tu historia, así que no hace falta que llenes nada más.
+      Te escribimos por WhatsApp para coordinar tu control.</p>
+      <a class="btn btn-p" href="https://wa.me/51991137288" style="margin-top:1.4rem;display:inline-block">
+        Escribir por WhatsApp ahora →</a>
+    </div></div>`;
+  ir(TOTAL + 1);
+  try { localStorage.removeItem(CLAVE); } catch (e) {}
+}
+
+/* ---------- resultado ---------- */
+function recomendar(l){
+  const cond = l.condicion || 'Ninguna';
+  const obj = l.objetivo || '';
+  // La elección explícita manda. Lima solo decide cuando dijo "la que haya antes".
+  const mod = l.modalidad || '';
+  // "La que haya antes" se resuelve a presencial solo si puede llegar a Miraflores:
+  // Lima o Callao. Antes se miraba `ciudad`, que ya no existe.
+  const cerca = l.estado === 'Lima' || l.estado === 'Callao';
+  const presencial = mod.startsWith('Presencial') || (mod === 'Cualquiera' && cerca);
+  let perfil, plan, icono, porque, precio, cierre;
+
+  if (cond === 'Cirugía bariátrica' || obj === 'Cirugía bariátrica'){
+    perfil = 'Acompañamiento bariátrico';
+    plan = presencial ? 'Paquete bariátrico presencial' : 'Paquete bariátrico virtual';
+    precio = presencial ? 'S/1,100' : 'S/870';
+    cierre = 'Empecemos por tu primera cita';
+    icono = 'brand/Paquete-Bariatrico.png';
+    porque = 'Tu caso necesita control de proteína, suplementación y textura por etapas: son 5 citas, una al mes, durante 5 meses. Es una especialidad, no una dieta genérica.';
+  } else if (cond === 'Embarazo o lactancia' || obj === 'Embarazo o lactancia'){
+    perfil = 'Nutrición en embarazo y lactancia';
+    plan = presencial ? 'Cita presencial' : 'Cita virtual';
+    precio = presencial ? 'S/240' : 'S/200';
+    cierre = 'Reservemos tu primera consulta';
+    icono = 'brand/Paquete-Embarazo.png';
+    porque = 'Aquí no se trata de bajar de peso, sino de cubrir requerimientos tuyos y del bebé en cada trimestre.';
+  } else if (cond === 'Digestiva (colon, gastritis, reflujo)' || obj === 'Problemas digestivos'){
+    perfil = 'Enfoque digestivo y microbiota';
+    plan = presencial ? 'Paquete Vane Tello presencial' : 'Paquete Vane Tello virtual';
+    precio = presencial ? 'S/880' : 'S/700';
+    cierre = 'Ordenemos tus síntomas por fases';
+    icono = presencial ? 'brand/Cita-unica-presencial.png' : 'brand/Cita-unica-virtual.png';
+    porque = 'Los síntomas digestivos se ordenan por fases: primero calmamos, después reintroducimos. Por eso conviene consulta + control.';
+  } else if (l.antes === 'Sí, pero no funcionó' || (l.dificultad || '').includes('Bajo y vuelvo a subir')){
+    perfil = 'Romper el ciclo de rebote';
+    plan = presencial ? 'Paquete Vane Tello presencial' : 'Paquete Vane Tello virtual';
+    precio = presencial ? 'S/880' : 'S/700';
+    cierre = 'Esta vez, con el ajuste incluido';
+    icono = presencial ? 'brand/Cita-unica-presencial.png' : 'brand/Cita-unica-virtual.png';
+    porque = 'Si ya bajaste y volviste a subir, el problema no es el plan inicial: es el ajuste. El control a las 2 semanas es la pieza que faltaba.';
+  } else if (obj === 'Ganar masa muscular'){
+    perfil = 'Composición corporal';
+    plan = 'Cita presencial con evaluación SECA';
+    precio = 'S/240';
+    cierre = 'Midamos de dónde partes';
+    icono = 'brand/Cita-unica-presencial.png';
+    porque = 'Para ganar músculo hay que medir masa muscular, no solo peso. La balanza de bioimpedancia lo muestra.';
+  } else if (l.cuando === 'Solo estoy averiguando'){
+    perfil = 'Primer paso, sin apuro';
+    plan = presencial ? 'Cita presencial' : 'Cita virtual';
+    precio = presencial ? 'S/240' : 'S/200';
+    cierre = 'Una sola consulta, sin compromiso';
+    icono = presencial ? 'brand/Cita-unica-presencial.png' : 'brand/Cita-unica-virtual.png';
+    porque = 'Empieza con una sola consulta y tu plan de 7 días. Si te acomoda, seguimos; si no, ya te llevas algo que sirve.';
+  } else {
+    perfil = obj === 'Perder peso' ? 'Pérdida de peso sostenible' : 'Construcción de hábitos';
+    plan = presencial ? 'Paquete Vane Tello presencial' : 'Paquete Vane Tello virtual';
+    precio = presencial ? 'S/880' : 'S/700';
+    cierre = obj === 'Perder peso' ? 'Empecemos por tu plan de 7 días' : 'Armemos tus hábitos con un plan real';
+    icono = presencial ? 'brand/Cita-unica-presencial.png' : 'brand/Cita-unica-virtual.png';
+    porque = 'Consulta + control a las 2 semanas: es donde se ajusta el plan a lo que de verdad pudiste cumplir.';
+  }
+
+  const incluye = [
+    'Plan de alimentación de 7 días con recetas y porciones',
+    'Historia clínica completa y revisión de tus exámenes',
+    presencial ? 'Evaluación de composición corporal con balanza SECA' : 'Seguimiento de medidas y avance por WhatsApp',
+    'Opciones de reemplazo para cuando comes fuera',
+    l.cuando === 'Esta semana' ? 'Prioridad en la agenda de esta semana' : 'Control recomendado cada 2 semanas'
+  ];
+  return {perfil, plan, icono, porque, incluye, precio, cierre};
+}
+
+function pintarResultado(){
+  const r = recomendar(lead);
+  const nombre = (lead.nombre || '').split(' ')[0];
+  $('#r-titulo').textContent = nombre ? `${nombre}, tu perfil es: ${r.perfil}` : `Tu perfil es: ${r.perfil}`;
+  $('#r-texto').textContent = r.porque;
+  $('#r-plan').textContent = r.plan;
+  $('#r-precio').textContent = r.precio || '';
+  $('#r-cierre').textContent = r.cierre || '¿Lo vemos juntas?';
+  $('#r-icono').src = r.icono;
+  const esPaquete = /Paquete/.test(r.plan);
+  const donde = lead.modalidad === 'Presencial (Miraflores)'
+    ? 'Presencial, en la Clínica Avendaño de Miraflores (martes y jueves).'
+    : 'Virtual por Zoom, desde donde estés.';
+  const cuantas = /bariátrico/.test(r.plan) ? ' Son 5 citas, una al mes.'
+                : esPaquete ? ' Son 4 citas y 4 planes en 6 semanas.' : '';
+  $('#r-plan-por').textContent = donde + cuantas;
+  $('#r-incluye').innerHTML = r.incluye.map(t => `<li>${t}</li>`).join('');
+  const msg = `Hola Vane, soy ${lead.nombre}. Hice el test y me salió: ${r.perfil}. Quiero avanzar con ${r.plan}.`;
+  $('#r-wa').href = `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+  localStorage.removeItem('vt_progreso');   // terminó: ya no hay nada que retomar
+}
+
+/* ---------- Autocomprobación: descubre.html?selftest=1 ---------- */
+if (new URLSearchParams(location.search).get('selftest')){
+  const fallos = [];
+  const casos = [
+    [{objetivo:'Cirugía bariátrica'}, 'Acompañamiento bariátrico'],
+    [{objetivo:'Embarazo o lactancia'}, 'Nutrición en embarazo y lactancia'],
+    [{objetivo:'Problemas digestivos'}, 'Enfoque digestivo y microbiota'],
+    [{objetivo:'Perder peso', antes:'Sí, pero no funcionó'}, 'Romper el ciclo de rebote'],
+    [{objetivo:'Ganar masa muscular'}, 'Composición corporal'],
+    [{objetivo:'Perder peso', cuando:'Solo estoy averiguando'}, 'Primer paso, sin apuro'],
+    [{objetivo:'Perder peso', cuando:'Esta semana'}, 'Pérdida de peso sostenible'],
+    [{objetivo:'Mejorar mis hábitos'}, 'Construcción de hábitos'],
+  ];
+  casos.forEach(([l, esperado]) => {
+    const r = recomendar(l);
+    if (r.perfil !== esperado) fallos.push(`${JSON.stringify(l)} → esperaba "${esperado}", dio "${r.perfil}"`);
+    if (!r.icono || r.incluye.length !== 5) fallos.push('ruta incompleta: ' + r.perfil);
+    if (!r.precio || !r.cierre) fallos.push('ruta sin precio o sin cierre: ' + r.perfil);
+  });
+  const tels = [
+    ['987654321', '+51987654321'],
+    ['999 888 777', '+51999888777'],
+    ['51987654321', '+51987654321'],
+    ['+1 305 555 4444', '+13055554444'],
+    ['12345', null],
+    ['no es un número', null],
+  ];
+  tels.forEach(([entrada, esperado]) => {
+    const dio = normalizarTel(entrada);
+    if (dio !== esperado) fallos.push(`tel "${entrada}" → esperaba ${esperado}, dio ${dio}`);
+  });
+  console.log(fallos.length ? '❌ ' + fallos.join('\n') : `✅ ${casos.length} rutas + ${tels.length} teléfonos OK`);
+  document.title = (fallos.length ? '❌ ' + fallos.length + ' fallos' : '✅ selftest OK') + ' · descubre';
+}
+</script>
+</body>
+</html>
