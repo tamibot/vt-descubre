@@ -1,0 +1,119 @@
+/* Marca Vane Tello — tokens y piezas compartidas.
+   Sale del Manual de Identidad: verde #9BB937 predomina, Lato para el cuerpo.
+   `descubre.html` mantiene sus estilos propios a propósito: funciona y no se
+   toca por ordenar. Esto lo usan las páginas nuevas. */
+:root{
+  --verde:#9BB937; --verde-osc:#7A9425; --verde-cl:#C3D583;
+  --verde-pal:#EDF3DC; --verde-hum:#F7FAEF;
+  --taupe:#8E8565; --taupe-cl:#C3BCA8;
+  --naranja:#F7903C; --naranja-pal:#FEF0E3;
+  --amarillo:#F4E9AB; --amarillo-pal:#FBF6DE;
+  --tinta:#41423A; --tinta-sv:#78796D; --sans:'Lato',system-ui,sans-serif;
+  --r:20px; --sombra:0 18px 44px -26px rgba(65,66,58,.32);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--sans);font-weight:400;color:var(--tinta);background:#fff;
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(720px,92vw);margin-inline:auto}
+h1{font-family:var(--sans);font-weight:900;font-size:clamp(1.65rem,4.4vw,2.3rem);
+   line-height:1.18;letter-spacing:-.02em;color:var(--verde-osc)}
+h2{font-family:var(--sans);font-weight:900;font-size:clamp(1.3rem,3.4vw,1.7rem);
+   color:var(--verde-osc);line-height:1.25;letter-spacing:-.015em}
+p{max-width:60ch}
+.lead{font-size:1.06rem;color:var(--tinta-sv);font-weight:300}
+
+/* barra superior */
+.top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.95);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--verde-pal)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;
+  gap:.8rem;padding:.6rem 0;min-height:64px}
+/* El logo es un lockup horizontal de 3:1 —"V T NUTRICIONISTAS by Vane Tello"—,
+   no una marca compacta. Escalarlo por ALTURA lo dejaba en 34px de alto y unos
+   100 de ancho: a ese tamaño "NUTRICIONISTAS" mide 8 píxeles y no se lee.
+   Se dimensiona por ancho, que es la medida que manda en un lockup. */
+.lock{display:flex;align-items:center}
+.lock img{width:clamp(140px,36vw,168px);height:auto}
+.gratis{background:var(--verde-pal);color:var(--verde-osc);font-weight:900;
+  font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;
+  padding:.32rem .8rem;border-radius:999px}
+
+/* pasos */
+.paso{display:none;padding:1.6rem 0 2.4rem}
+.paso.on{display:block}
+.barra{height:4px;background:var(--verde-pal);border-radius:99px;margin:.9rem 0 1.4rem}
+.barra i{display:block;height:100%;background:var(--verde);border-radius:99px;
+  transition:width .3s ease}
+
+/* tarjetas y campos */
+.card{background:#fff;border:1px solid var(--verde-pal);border-radius:var(--r);
+  padding:1.4rem;box-shadow:var(--sombra)}
+.campo{margin-bottom:1.1rem}
+.campo>label,legend{display:block;font-weight:700;font-size:.95rem;margin-bottom:.45rem}
+legend small{display:block;font-weight:300;color:var(--tinta-sv);font-size:.82rem}
+input,select,textarea{
+  width:100%;font-family:var(--sans);font-size:1rem;color:var(--tinta);
+  padding:.8rem .9rem;border:1.5px solid var(--verde-pal);border-radius:12px;
+  background:#fff;min-height:48px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--verde)}
+.err{display:none;color:var(--naranja);font-size:.85rem;margin-top:.3rem;font-weight:700}
+.malo input,.malo select{border-color:var(--naranja)}
+.malo .err{display:block}
+
+/* opciones tocables */
+.ops{display:grid;gap:.6rem}
+.ops.g2{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.op{position:relative;display:block}
+.op input{position:absolute;opacity:0;width:0;height:0}
+.op span{display:flex;align-items:center;justify-content:center;text-align:center;
+  min-height:52px;padding:.7rem .8rem;border:1.5px solid var(--verde-pal);
+  border-radius:14px;font-size:.95rem;cursor:pointer;transition:.15s;line-height:1.3}
+.op input:checked+span{border-color:var(--verde);background:var(--verde-hum);font-weight:700}
+.op input:focus-visible+span{outline:2px solid var(--verde);outline-offset:2px}
+
+/* botones */
+.acciones{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.4rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  font-family:var(--sans);font-weight:900;font-size:1rem;min-height:52px;
+  padding:.8rem 1.6rem;border:none;border-radius:999px;cursor:pointer;transition:.15s}
+.btn-p{background:var(--verde);color:#fff;flex:1}
+.btn-p:hover{background:var(--verde-osc)}
+.btn-s{background:transparent;color:var(--tinta-sv);border:1.5px solid var(--verde-pal)}
+.btn-wa{background:#25D366;color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* avisos */
+.aviso{font-size:.85rem;color:var(--tinta-sv);font-weight:300;margin-top:1rem}
+.nota{background:var(--verde-hum);border-radius:14px;padding:.9rem 1rem;
+  font-size:.9rem;line-height:1.55;margin-top:1rem}
+
+/* ---------------------------------------------------------------- movimiento
+   Poco y con motivo: confirmar que un toque llegó, y suavizar lo que aparece
+   de golpe. Nada decorativo — en un formulario, el movimiento que no informa
+   distrae. Todo se apaga solo con `prefers-reduced-motion`, que en iOS lo
+   activa mucha gente por mareo, no por gusto. */
+@media (prefers-reduced-motion: no-preference){
+  .paso.on{animation:entra .32s ease both}
+  .op span,.tarj span,.card,.btn{transition:transform .12s ease,border-color .15s ease,
+    background .15s ease,box-shadow .15s ease}
+  .op input:checked+span,.tarj input:checked+span{animation:late .22s ease}
+  .btn-p:active,.op span:active,.tarj span:active{transform:scale(.985)}
+  .aparece{animation:entra .3s ease both}
+}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes late{50%{transform:scale(1.015)}}
+
+/* El foco visible es accesibilidad, no adorno: quien navega con teclado no
+   tiene otra forma de saber dónde está. */
+:where(a,button,input,select,textarea,summary):focus-visible{
+  outline:2px solid var(--verde);outline-offset:2px;border-radius:6px}
+
+footer{background:var(--verde-hum);border-top:1px solid var(--verde-pal);
+  padding:1.8rem 0;margin-top:2rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:.9rem;justify-content:space-between;
+  align-items:center;font-size:.82rem;color:var(--tinta-sv);font-weight:300}
+footer img{width:186px;opacity:.95}
