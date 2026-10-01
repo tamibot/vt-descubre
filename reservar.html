@@ -13,12 +13,12 @@
 <meta property="og:locale" content="es_PE">
 <meta property="og:title" content="Reserva tu cita · Lic. Vanessa Tello">
 <meta property="og:description" content="Elige presencial o virtual, tu día y tu hora.">
-<meta property="og:url" content="https://tamibot.github.io/vt-descubre/reservar.html">
-<meta property="og:image" content="https://tamibot.github.io/vt-descubre/img/preview-whatsapp.jpg">
+<meta property="og:url" content="https://descubre.vanessatello.com.pe/reservar.html">
+<meta property="og:image" content="https://descubre.vanessatello.com.pe/img/preview-whatsapp.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="marca.css?v=ea3757e3">
+<link rel="stylesheet" href="marca.css?v=dev">
 <style>
 /* UNA sola pantalla. Los pasos separados obligaban a adivinar cuánto falta y
    escondían el precio hasta el final; acá todo se ve de una y se baja. */
@@ -440,7 +440,7 @@ const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-$
    falla cerrada: una página sin horarios es recuperable por WhatsApp; dos citas
    cruzadas no lo son. */
 fetch(AGENDA_TOMADA, { signal: AbortSignal.timeout(5000) })
-  .then(r => r.json())
+  .then(r => { if (!r.ok) throw new Error('Agenda no disponible'); return r.json(); })
   .then(d => { tomadas = new Set(d.ocupadas || []); agendaCargada = true; pintarCalendario(); pintarHoras(); })
   .catch(() => { agendaCargada = true; agendaError = true; pintarCalendario(); pintarHoras(); });
 
@@ -807,13 +807,17 @@ $('#f').addEventListener('submit', async e => {
   };
   try {
     // Con tope: si el CRM tarda, ella no se queda mirando "Reservando…".
-    await fetch(CRM, {method:'POST', headers:{'Content-Type':'application/json'},
-                      body: JSON.stringify(datos), signal: AbortSignal.timeout(8000)});
+    const respuesta = await fetch(CRM, {method:'POST', headers:{'Content-Type':'application/json'},
+                      body: JSON.stringify(datos), signal: AbortSignal.timeout(30000)});
+    const resultado = await respuesta.json();
+    if (!respuesta.ok || !resultado.ok) throw new Error(resultado.motivo || 'No se pudo apartar el horario.');
   } catch(err){
-    // Si el CRM no responde, la reserva no se pierde: se guarda y el mensaje
-    // de WhatsApp lleva todo, que es el camino que ya existe hoy.
-    try { localStorage.setItem('vt_reserva_' + Date.now(), JSON.stringify(datos)); } catch(x){}
+    boton.disabled = false; boton.textContent = 'Reservar cita';
+    const aviso = $('#reserva-error') || (() => { const p = document.createElement('p'); p.id = 'reserva-error'; p.setAttribute('role','alert'); boton.before(p); return p; })();
+    aviso.textContent = err.name === 'TimeoutError' ? 'La respuesta está tardando. Consulta con el equipo por WhatsApp antes de intentar otra reserva.' : (err.message || 'No se pudo completar la reserva. Intenta de nuevo o consulta por WhatsApp.');
+    aviso.scrollIntoView({ behavior:'smooth', block:'center' }); return;
   }
+
 
   const p = PAGOS.find(x => x.nombre === cita.pago);
   const listos = Object.entries(p.datos).filter(([, v]) => !String(v).startsWith('PENDIENTE'));
