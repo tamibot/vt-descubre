@@ -417,6 +417,7 @@ const $$ = s => [...document.querySelectorAll(s)];
 const cita = {};
 cita.profesional = 'Lic. Vanessa Tello';
 let tomadas = new Set();
+let disponibles = null;
 let agendaCargada = false;
 let agendaError = false;
 
@@ -441,7 +442,7 @@ const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-$
    cruzadas no lo son. */
 fetch(AGENDA_TOMADA, { signal: AbortSignal.timeout(5000) })
   .then(r => { if (!r.ok) throw new Error('Agenda no disponible'); return r.json(); })
-  .then(d => { tomadas = new Set(d.ocupadas || []); agendaCargada = true; pintarCalendario(); pintarHoras(); })
+  .then(d => { if (!d.disponibles || typeof d.disponibles!=='object') throw new Error('Oferta de agenda incompleta'); disponibles=d.disponibles; tomadas = new Set(d.ocupadas || []); agendaCargada = true; pintarCalendario(); pintarHoras(); })
   .catch(() => { agendaCargada = true; agendaError = true; pintarCalendario(); pintarHoras(); });
 
 function marcar(el, mal){
@@ -550,8 +551,8 @@ function horasDe(diaIso){
     const [dia, hora] = t.split('T');
     return dia === diaIso && Math.abs(aMin(h) - aMin(hora)) < DURACION;
   });
-  const tramos = AGENDA[cita.modalidad].dias[new Date(diaIso + 'T12:00:00').getDay()] || [];
-  return turnos(tramos).map(h => ({ h, ocupada: ocupada(h) }));
+  if (!disponibles) return [];
+  return (disponibles[cita.modalidad]?.[diaIso] || []).map(h => ({h,ocupada:ocupada(h)}));
 }
 /* Días en que no se atiende: vacaciones del equipo, feriados. Se comprueba
    dentro de `diaDisponible` porque por ahí pasan el calendario, las horas y el
@@ -568,7 +569,7 @@ function diaDisponible(d){
   if (estaCerrado(iso(d))) return false;
   const minimo = hoyLima(); minimo.setDate(minimo.getDate() + DIAS_MINIMO);
   if (d < minimo) return false;
-  if (!AGENDA[cita.modalidad].dias[d.getDay()]) return false;
+  if (!(disponibles?.[cita.modalidad]?.[iso(d)] || []).length) return false;
   return horasDe(iso(d)).some(x => !x.ocupada);   // un día lleno no es un día libre
 }
 function mesTieneEspacio(m){
