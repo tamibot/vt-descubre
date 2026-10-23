@@ -95,6 +95,9 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
 .horas .op span{min-height:44px;font-variant-numeric:tabular-nums}
 .op.ocupada span{opacity:.35;cursor:not-allowed;text-decoration:line-through}
 .apagado{opacity:.4;pointer-events:none;filter:grayscale(.4)}
+/* 23-oct: el calendario en gris sin fechas parecía «sin cupos» (4 visitas, 0 reservas). Oculto hasta elegir modalidad. */
+#cal-caja.apagado{display:none}
+#cal-aviso{margin:.4rem 0 0;padding:1rem 1.1rem;border-radius:12px;background:#F2F7E6;border:1px solid #CFE0A8;font-size:1.02rem;color:#2F4A1A}
 @media (prefers-reduced-motion: no-preference){
   #cal-caja{transition:opacity .3s ease,filter .3s ease}
 }
@@ -182,6 +185,7 @@ details.extra .campo:first-of-type{margin-top:1rem}
 
     <div class="bloque" id="b-cuando">
       <h2><i><span>3</span></i> ¿Qué día te queda bien?</h2>
+      <p class="aviso" id="cal-aviso">👆 Primero elige arriba <b>presencial</b> o <b>virtual</b> y aquí te mostramos los días y horas libres.</p>
       <div id="cal-caja" class="apagado">
         <div class="cal">
           <div class="cal-top">
@@ -194,7 +198,6 @@ details.extra .campo:first-of-type{margin-top:1rem}
         </div>
         <div class="horas" id="ops-hora"></div>
       </div>
-      <p class="aviso" id="cal-aviso" style="margin-top:.6rem">Elige arriba presencial o virtual y acá te aparecen los días con espacio.</p>
       <span class="err" id="err-cuando">Elige un día y una hora.</span>
     </div>
 
