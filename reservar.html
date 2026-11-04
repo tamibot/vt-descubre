@@ -785,7 +785,7 @@ $('#f').addEventListener('submit', async e => {
   }
 
   const boton = $('#reservar');
-  boton.disabled = true; boton.textContent = 'Reservando…';
+  boton.disabled = true; boton.textContent = 'Reservando… puede tardar un minuto';
 
   const q = new URLSearchParams(location.search);
   const menor = esMenor($('#nacimiento').value);
@@ -812,7 +812,7 @@ $('#f').addEventListener('submit', async e => {
   try {
     // Con tope: si el CRM tarda, ella no se queda mirando "Reservando…".
     const respuesta = await fetch(CRM, {method:'POST', headers:{'Content-Type':'application/json'},
-                      body: JSON.stringify(datos), signal: AbortSignal.timeout(30000)});
+                      body: JSON.stringify(datos), signal: AbortSignal.timeout(60000)});
     const resultado = await respuesta.json();
     if (!respuesta.ok || !resultado.ok) throw new Error(resultado.motivo || 'No se pudo apartar el horario.');
   } catch(err){
@@ -838,7 +838,7 @@ $('#f').addEventListener('submit', async e => {
       (listos.length ? ` — ${listos.map(([k, v]) => `${k}: <b>${v}</b>`).join(' · ')}`
                      : ' — te mandamos los datos por WhatsApp'),
     `Mándanos el comprobante por WhatsApp`,
-    `Te confirmamos la cita por correo y por WhatsApp`,
+    `Te confirmamos la cita por WhatsApp`,
   ].map((x, i) => `<li><span class="n">${i+1}</span><span>${x}</span></li>`).join('') +
     `<li><span class="n">⏱</span><span>Tienes <b>${HORAS_PARA_PAGAR} horas</b>;
       después el horario vuelve a estar disponible.</span></li>`;
